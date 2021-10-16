@@ -12,7 +12,6 @@ MIT License
 Copyright Alex Gisby <alex@solution10.com>
 """
 
-
 import sys
 import re
 import urllib.request, urllib.parse, urllib.error
@@ -33,7 +32,6 @@ If you omit the dest folder name, the utility will create one with the same name
 as the album 
 (for example for http://imgur.com/a/uOOju it'll create uOOju/ in the cwd)
 """
-
 
 class ImgurAlbumException(Exception):
     def __init__(self, msg=False):
@@ -140,8 +138,14 @@ class ImgurAlbumDownloader:
                 fn(counter, image_url, path)
 
             # Actually download the thing
+            n=''
             if os.path.isfile(path):
-                print ("Skipping, already exists.")
+                n=input(r'File Already Exists, Do you want to download again?(Y/N):')
+                if(n=='Y'):
+                    os.remove(path)
+                    urllib.request.urlretrieve(image_url, path)
+                if(n=='N'):
+                    print ("Skipping, already exists.")
             else:
                 try:
                     urllib.request.urlretrieve(image_url, path)
@@ -155,7 +159,7 @@ class ImgurAlbumDownloader:
 
 if __name__ == '__main__':
     args = sys.argv
-
+    
     if len(args) == 1:
         # Print out the help message and exit:
         print (help_message)
